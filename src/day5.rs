@@ -25,7 +25,13 @@ fn parse(input: &str) -> (Vec<Stack>, impl Iterator<Item = (usize, usize, usize)
                     .step_by(1)
                     .flat_map(|l| l.parse::<usize>())
             })
-            .map(|mut l| (l.next().unwrap(), l.next().unwrap() - 1, l.next().unwrap() - 1)),
+            .map(|mut l| {
+                (
+                    l.next().unwrap(),
+                    l.next().unwrap() - 1,
+                    l.next().unwrap() - 1,
+                )
+            }),
     )
 }
 
