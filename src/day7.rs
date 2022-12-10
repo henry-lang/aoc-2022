@@ -57,12 +57,13 @@ impl Node {
                     ".." => {
                         break; // We've exited out of this directory so we're done
                     }
-                    _ => {
-                        self.add_child(Node {
+                    _ => self.add_child(
+                        Node {
                             size: 0,
                             children: Vec::new(),
-                        }.build(commands))
-                    }
+                        }
+                        .build(commands),
+                    ),
                 },
                 FileInfo(_, size) => {
                     self.add_child(Node {
