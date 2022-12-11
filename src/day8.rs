@@ -28,40 +28,49 @@ impl Dir for (isize, isize) {
     }
 }
 
-pub fn part_a(input: &str) -> impl ToString {
-    let map = Rc::new(
-        input
-            .lines()
-            .map(|l| l.chars().map(|c| c as u8 - b'0').collect())
-            .collect::<Vec<Vec<_>>>(),
-    );
+fn view_iter(map: &Vec<Vec<u8>>) -> impl Iterator<Item = [Option<usize>; 4]> + '_ {
+    let map = Rc::new(map);
 
-    map.iter()
-        .zip(0isize..)
-        .flat_map(|(r, i)| {
-            let map_clone = map.clone();
-            r.iter().zip(0isize..).map(move |(c, j)| {
-                let map_clone = map_clone.clone();
-                DIRS.iter()
-                    .map(|d| {
-                        (i, j)
-                            .dir(*d)
-                            .take_while(|(x, y)| {
-                                *x >= 0
-                                    && *y >= 0
-                                    && *x < map_clone.len() as isize
-                                    && *y < map_clone.len() as isize
-                            })
-                            .find(|(x, y)| map_clone[*x as usize][*y as usize] >= *c)
+    map.iter().zip(0isize..).flat_map(move |(r, i)| {
+        let map_clone = map.clone();
+        r.iter().zip(0isize..).map(move |(c, j)| {
+            let map_clone = map_clone.clone();
+            DIRS.map(|d| {
+                (i, j)
+                    .dir(d)
+                    .take_while(|(x, y)| {
+                        *x >= 0
+                            && *y >= 0
+                            && *x < map_clone.len() as isize
+                            && *y < map_clone.len() as isize
                     })
-                    .any(|d| d.is_none()) as usize
+                    .enumerate()
+                    .find(|(_, (x, y))| map_clone[*x as usize][*y as usize] >= *c)
+                    .map(|(i, _)| i)
             })
         })
-        .sum::<usize>()
+    })
+}
+
+pub fn part_a(input: &str) -> impl ToString {
+    let map = input
+        .lines()
+        .map(|l| l.chars().map(|c| c as u8 - b'0').collect())
+        .collect::<Vec<Vec<_>>>();
+
+    view_iter(&map).filter(|arr| arr.contains(&None)).count()
 }
 
 pub fn part_b(input: &str) -> impl ToString {
-    0
+    let map = input
+        .lines()
+        .map(|l| l.chars().map(|c| c as u8 - b'0').collect())
+        .collect::<Vec<Vec<_>>>();
+    
+    view_iter(&map)
+        .map(|arr| dbg!(arr).iter().flat_map(|&d| d).product::<usize>())
+        .max()
+        .unwrap()
 }
 
-crate::test_day!(8, 21, 0);
+crate::test_day!(8, 21, 8);
