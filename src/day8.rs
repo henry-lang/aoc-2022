@@ -66,11 +66,11 @@ pub fn part_b(input: &str) -> impl ToString {
         .lines()
         .map(|l| l.chars().map(|c| c as u8 - b'0').collect())
         .collect::<Vec<Vec<_>>>();
-    
+
     view_iter(&map)
-        .map(|arr| dbg!(arr).iter().flat_map(|&d| d).product::<usize>())
+        .map(|arr| arr.iter().flat_map(|&d| d).product::<usize>())
         .max()
         .unwrap()
 }
 
-crate::test_day!(8, 21, 8);
+crate::test_day!(8, 21, 3);

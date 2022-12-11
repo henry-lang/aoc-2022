@@ -11,7 +11,7 @@ pub mod day7;
 pub mod day8;
 // pub mod day9;
 pub mod day10;
-// pub mod day11;
+pub mod day11;
 // pub mod day12;
 // pub mod day13;
 // pub mod day14;
@@ -44,11 +44,15 @@ macro_rules! test_day {
                     let result = super::part_b(sample);
                     assert_eq!(result.to_string(), $sample_b_answer.to_string());
 
+                    let start = std::time::Instant::now();
                     let result = super::part_a(input);
-                    println!("{}", result.to_string());
+                    println!("Part A: {}", result.to_string());
+                    println!("Took {}ns", start.elapsed().as_nanos());
 
+                    let start = std::time::Instant::now();
                     let result = super::part_b(input);
-                    println!("{}", result.to_string());
+                    println!("Part B: {}", result.to_string());
+                    println!("Took {}ns", start.elapsed().as_nanos());
                 }
             });
         }
