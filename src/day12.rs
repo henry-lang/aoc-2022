@@ -35,7 +35,7 @@ struct State {
     steps: usize,
 }
 
-pub fn part_a(input: &str) -> impl ToString {
+fn solve(input: &str, target: char) -> usize {
     let (grid, start) = parse_grid(input);
 
     let mut queue = VecDeque::new();
@@ -55,12 +55,11 @@ pub fn part_a(input: &str) -> impl ToString {
             continue;
         }
 
-        visited.insert(current);
 
         let current_depth = depth(grid[x][y]);
 
-        if grid[x][y] == 'S' {
-            best = visited.len();
+        if grid[x][y] == target {
+            best = best.min(steps);
             break;
         }
 
@@ -73,20 +72,24 @@ pub fn part_a(input: &str) -> impl ToString {
             .map(|(a, b)| (a as usize, b as usize))
         {
             let next_depth = depth(grid[pos.0][pos.1]);
-            if !(next_depth > current_depth || next_depth + 1 == current_depth) || visited.contains(&pos) {
+            if next_depth < current_depth.checked_sub(1).unwrap_or(0) || visited.contains(&pos) {
                 continue;
             }
 
             queue.push_back(State {pos, steps: steps + 1});
         }
-        break;
+        visited.insert(current);
     }
 
     best
 }
 
-pub fn part_b(input: &str) -> impl ToString {
-    0
+pub fn part_a(input: &str) -> impl ToString {
+    solve(input, 'S')
 }
 
-crate::test_day!(12, 31, 0);
+pub fn part_b(input: &str) -> impl ToString {
+    solve(input, 'a')
+}
+
+crate::test_day!(12, 31, 29);
