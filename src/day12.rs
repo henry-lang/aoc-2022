@@ -12,7 +12,7 @@ fn parse_grid(input: &str) -> (Vec<Vec<char>>, (usize, usize)) {
     'outer: for i in 0..grid.len() {
         for j in 0..grid[0].len() {
             if grid[i][j] == 'E' {
-                start = (i as usize, j as usize);
+                start = (i, j);
                 break 'outer;
             }
         }
@@ -55,7 +55,6 @@ fn solve(input: &str, target: char) -> usize {
             continue;
         }
 
-
         let current_depth = depth(grid[x][y]);
 
         if grid[x][y] == target {
@@ -72,11 +71,14 @@ fn solve(input: &str, target: char) -> usize {
             .map(|(a, b)| (a as usize, b as usize))
         {
             let next_depth = depth(grid[pos.0][pos.1]);
-            if next_depth < current_depth.checked_sub(1).unwrap_or(0) || visited.contains(&pos) {
+            if next_depth < current_depth.saturating_sub(1) || visited.contains(&pos) {
                 continue;
             }
 
-            queue.push_back(State {pos, steps: steps + 1});
+            queue.push_back(State {
+                pos,
+                steps: steps + 1,
+            });
         }
         visited.insert(current);
     }

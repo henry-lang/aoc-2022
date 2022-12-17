@@ -1,10 +1,8 @@
 #![feature(iter_array_chunks)]
 #![feature(array_windows)]
+#![feature(type_alias_impl_trait)]
 
 pub mod day1;
-pub mod day10;
-pub mod day11;
-pub mod day12;
 pub mod day2;
 pub mod day3;
 pub mod day4;
@@ -12,8 +10,11 @@ pub mod day5;
 pub mod day6;
 pub mod day7;
 pub mod day8;
-pub mod day9;
-// pub mod day13;
+//pub mod day9;
+pub mod day10;
+pub mod day11;
+pub mod day12;
+pub mod day13;
 // pub mod day14;
 // pub mod day15;
 // pub mod day16;
@@ -44,15 +45,21 @@ macro_rules! test_day {
                     let result = super::part_b(sample);
                     assert_eq!(result.to_string(), $sample_b_answer.to_string());
 
-                    let start = std::time::Instant::now();
+                    let start = ::std::time::Instant::now();
                     let result = super::part_a(input);
-                    println!("Part A: {}", result.to_string());
-                    println!("Took {}ns", start.elapsed().as_nanos());
+                    let elapsed = start.elapsed();
+                    let result = result.to_string();
+                    let lines = result.lines().count();
+                    println!("Part A: {}{}", if lines > 1 {"\n"} else {""}, result);
+                    println!("Took {}ms", elapsed.as_nanos() as f64 / 1_000_000.0);
 
-                    let start = std::time::Instant::now();
+                    let start = ::std::time::Instant::now();
                     let result = super::part_b(input);
-                    println!("Part B: {}", result.to_string());
-                    println!("Took {}ns", start.elapsed().as_nanos());
+                    let elapsed = start.elapsed();
+                    let result = result.to_string();
+                    let lines = result.lines().count();
+                    println!("Part B: {}{}", if lines > 1 {"\n"} else {""}, result);
+                    println!("Took {}ms", elapsed.as_nanos() as f64 / 1_000_000.0);
                 }
             });
         }
