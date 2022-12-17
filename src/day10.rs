@@ -40,11 +40,9 @@ pub fn part_a(input: &str) -> impl ToString {
                 sum += cycle * x;
             }
         }
-        match instruction {
-            Instruction::Add(n) => {
-                x += n;
-            }
-            _ => {}
+
+        if let Instruction::Add(n) = instruction {
+            x += n;
         }
     }
 
@@ -63,17 +61,15 @@ pub fn part_b(input: &str) -> impl ToString {
             } else {
                 "."
             };
+
             cycle += 1;
             if cycle % 40 == 0 && cycle != 240 {
                 display += "\n";
             }
         }
 
-        match instruction {
-            Instruction::Add(n) => {
-                x += n;
-            }
-            _ => {}
+        if let Instruction::Add(n) = instruction {
+            x += n;
         }
     }
 

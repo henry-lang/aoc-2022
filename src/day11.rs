@@ -81,7 +81,7 @@ fn parse(input: &str) -> Vec<Monkey> {
                 .trim_start()
                 .strip_prefix("Operation: new = old ")
                 .unwrap()
-                .split_once(" ")
+                .split_once(' ')
                 .map(|(op, operand)| (op.parse().unwrap(), operand.parse().unwrap()))
                 .unwrap(),
             divisible_test: lines[3]
@@ -114,13 +114,14 @@ fn play(input: &str, rounds: usize, div_three: bool) -> usize {
             while let Some(item) = monkeys[m].items.pop_front() {
                 inspections[m] += 1;
 
-                let item = monkeys[m].operation.0.run(
-                    item % modulo,
-                    monkeys[m].operation.1.value(item % modulo) % modulo,
-                ) % modulo
+                let item = monkeys[m]
+                    .operation
+                    .0
+                    .run(item, monkeys[m].operation.1.value(item))
+                    % modulo
                     / if div_three { 3 } else { 1 };
 
-                let destination = if item % monkeys[m].divisible_test.clone() == 0 {
+                let destination = if item % monkeys[m].divisible_test == 0 {
                     monkeys[m].if_true
                 } else {
                     monkeys[m].if_false
@@ -143,4 +144,4 @@ pub fn part_b(input: &str) -> impl ToString {
     play(input, 10_000, false)
 }
 
-crate::test_day!(11, 10605, 2_713_310_158u64);
+crate::test_day!(11, 10_605, 2_713_310_158u64);
