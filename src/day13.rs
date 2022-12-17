@@ -89,7 +89,7 @@ pub fn part_a(input: &str) -> impl ToString {
     packet_iter(input)
         .array_chunks::<2>()
         .zip(1..)
-        .filter(|([a, b], _)| a.cmp(&b) == Ordering::Less)
+        .filter(|([a, b], _)| a.cmp(b) == Ordering::Less)
         .map(|(_, idx)| idx)
         .sum::<usize>()
 }
